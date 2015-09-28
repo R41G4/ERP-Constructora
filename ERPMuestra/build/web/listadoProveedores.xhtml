@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Listado de Proveedores</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <p:growl id="growl" life="5000" showDetail="true" />
+            
+            <p:dataTable id ="tablaOrdenCompras" emptyMessage="No se tienen Proveedores" var="pro" selection="#{listadoProveedoresMB.selectedListaProveedores}" value="#{listadoProveedoresMB.listaProveedores}" rowKey="#{pro.idProveedor}" >
+                <p:column selectionMode="multiple" style="width:2%;text-align:center"/>
+
+                <p:column headerText="No Proveedor">
+                    <h:outputText value="#{pro.idProveedor}" />
+                </p:column>
+                
+                <p:column headerText="Razon Social">
+                    <h:outputText value="#{pro.razonSocial}" />
+                </p:column>
+                
+                <p:column headerText="RFC">
+                    <h:outputText value="#{pro.rfc}" />
+                </p:column>
+                
+               <p:column headerText="Edición" style="width:4%;text-align: center">
+                   <p:commandButton  value="Editar" action="#{proveedoresMB.editarProveedor(pro.idProveedor)}">
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+           
+            
+            
+        </h:form>
+    </h:body>
+</html>
+
+
+
+

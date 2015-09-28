@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Pre Contrato</title>
+    </h:head>
+    <h:body>
+        <p:panel>
+            
+            <f:facet name="header" >
+                Pre Contratos
+            </f:facet>
+            <!--            Formulario de busqueda-->
+            <h:form id="contratForm">
+                
+                
+                <p:messages id="msgError" showDetail="true" autoUpdate="true" closable="true" />
+                
+                <h:panelGrid id="contratGrid" columns="4" >
+                    <h:outputLabel for="proy" value="Proyecto: " />
+                    <p:inputText id="proy" value="#{precontrato.proyecto}" onclick="PF('tabProy').show();" />
+                    
+                    <h:outputLabel for="pres" value="Presupuesto: " />
+                    <p:inputText id="pres" value="#{precontrato.presupuesto}" onclick="PF('dialPres').show();" />
+                    
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                    <h:outputLabel for="tipoContto" value="Tipo Pre Contrato: " />
+                    <p:selectOneMenu id="tipoContto" value="#{precontrato.tipoContto}" 
+                                     disabled="#{precontrato.tipo}" >
+                        <f:selectItem itemLabel="Seleccionar Tipo" itemValue="" />
+                        <f:selectItems value="#{precontrato.listaSubcs}" var="sub" itemLabel="#{sub.definicion}"
+                                       itemValue="#{sub.clave}" >
+                            
+                        </f:selectItems>
+                        
+                    </p:selectOneMenu>
+                    
+                    <p:commandButton value="Agregar Concepto" actionListener="#{precontrato.listarSubcontratos}" 
+                                     oncomplete="PF('insumos').show();"  update=":insForm:tblInsumos" />
+                    
+                    <p:commandButton value="Limpiar" actionListener="#{precontrato.limpiarFormulario}" 
+                                     update=":contratForm:contratGrid, :contratForm:tblContrats" />
+                    
+                </h:panelGrid>
+                
+                <br/>
+                <h:outputText value="Detalle de Conceptos por Contratar" style="font-size: larger; font-style: italic"/>
+                <br/>
+                <p:dataTable id="tblContrats" var="pre" value="#{precontrato.listaContrat}" editable="true" 
+                             rowKey="#{pre.codInsumo}" editMode="cell" >
+                
+                    <p:column headerText="Código Insumo" >
+                        <h:outputText value="#{pre.codInsumo}" />
+                    </p:column>
+     
+                    <p:column headerText="Descripción" >
+                        <h:outputText value="#{pre.descripcion}" />
+                    </p:column>
+                    
+                    <p:column headerText="Unidad" >
+                        <h:outputText value="#{pre.unidad}" />
+                    </p:column>
+                    
+                    <p:column headerText="Cantidad disponible" >
+                        <h:outputText value="#{pre.cantCtrl}" >
+                            <f:convertNumber maxFractionDigits="2" type="number" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Cantidad" >
+                        <p:cellEditor>
+                            <f:facet name="output"><p:inputText value="#{pre.cantContrato}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="cant" value="#{pre.cantContrato}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Precio Unitario" >
+                        <h:outputText value="#{pre.presUnit}" >
+                            <f:convertNumber currencySymbol="$" type="currency" />
+                        </h:outputText>
+                    </p:column>
+                                       
+                    <p:column headerText="Eliminar">
+                        <p:commandButton value="Eliminar" oncomplete="onRowDelete()" >
+                            <f:setPropertyActionListener value="#{pre}" target="#{precontrato.insumoSel}" />
+                        </p:commandButton>
+                    </p:column>
+                    
+                    <p:columnGroup type="footer" >
+                        <p:row >
+                            <p:column footerText="Insumos Agregados al Contrato" colspan="8" />
+                        </p:row>
+                    </p:columnGroup>
+                    
+                    <p:ajax event="cellEdit" listener="#{precontrato.validarCantidad}" oncomplete="onCellEdit()" />
+                
+                </p:dataTable>
+                <p:remoteCommand name="onCellEdit" actionListener="#{precontrato.editarImporte}" 
+                                 update=":contratForm:tblContrats, btnGuardar" />
+                
+                <p:remoteCommand name="onRowDelete" actionListener="#{precontrato.eliminarInsumo}" 
+                                 update=":contratForm:tblContrats" />
+                
+                <br/>
+                
+                <p:commandButton id="btnGuardar" value="Registrar" action="#{precontrato.guardarPreContrato}"  
+                                 disabled="#{!precontrato.activo}" ajax="false" />
+                
+                         
+                
+                
+            </h:form>
+        </p:panel>
+        
+<!--        Tabla de proyecto-->
+        <p:dialog widgetVar="tabProy" resizable="false" header="Proyectos" modal="true" closeOnEscape="true" >
+            
+            <h:form id="tabProyects" >
+                
+                <p:dataTable id="tbProy" value="#{precontrato.listProy}" var="cont" rowKey="#{cont.id_proyecto}"
+                             selection="#{precontrato.ps}" selectionMode="single" paginator="true" rows="15" >
+                
+                    
+                    <p:column headerText="No. Proyecto" >
+                        <h:outputText value="#{cont.id_proyecto}" />
+                    </p:column>
+                    
+                    <p:column headerText="Proyecto" >
+                        <h:outputText value="#{cont.proyecto}" />
+                    </p:column>
+                    
+                    <p:ajax event="rowSelect" listener="#{precontrato.obtenerProyecto}" 
+                            update=":contratForm:proy, :presForm:tblPres" oncomplete="PF('tabProy').hide();" />
+                
+                </p:dataTable>
+                
+            </h:form>
+            
+        </p:dialog>
+        
+<!--        Tabla presupuesto-->
+<p:dialog header="Presupuesto" widgetVar="dialPres" resizable="false" modal="true" width="400px" closeOnEscape="true" >
+            <h:form id="presForm" >
+                <p:dataTable id="tblPres" value="#{precontrato.listaPres}" var="pres" rowKey="#{pres.id_presupuesto}" 
+                             selection="#{precontrato.presB}" selectionMode="single" 
+                             paginator="true" rows="10" >
+
+                    <p:column headerText="No. Presupuesto"  >
+                        <h:outputText value="#{pres.id_presupuesto}" />
+                    </p:column>
+
+                    <p:column headerText="Presupuesto"  >
+                        <h:outputText value="#{pres.presupuesto}" />
+                    </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{precontrato.obtenerPresupuesto}" 
+                            update=":contratForm:pres" oncomplete="PF('dialPres').hide();" />  
+
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+        
+<!--        Tabla Insumos-->
+        <p:dialog widgetVar="insumos" closeOnEscape="true" resizable="false" closable="true" header="Insumos Subcontrato"
+                  modal="true">
+
+            <h:form id="insForm" >
+                <p:dataTable id="tblInsumos" value="#{precontrato.listaSubc}" var="ins" rowKey="#{ins.id_insumo}" 
+                             selection="#{precontrato.listaContrat}" paginator="true" rows="10" >
+                    
+                    <p:column selectionMode="multiple" style="text-align: center" />
+                    
+                    <p:column headerText="Codigo Insumo" >
+                        <h:outputText value="#{ins.codInsumo}" />
+                    </p:column>
+
+                    <p:column headerText="Codigo Concepto" >
+                        <h:outputText value="#{ins.codConcepto}" />
+                    </p:column>
+
+                    <p:column headerText="Descrpción" >
+                        <h:outputText value="#{ins.descripcion}" />
+                    </p:column>
+
+                    <p:column headerText="Unidad" >
+                        <h:outputText value="#{ins.unidad}" />
+                    </p:column>
+
+                    <p:column headerText="Precio Unitario" >
+                        <h:outputText value="#{ins.presUnit}" >
+                            <f:convertNumber currencySymbol="$" type="currency" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Cantidad x Contratar" >
+                        <h:outputText value="#{ins.cantCtrl}" >
+                            <f:convertNumber maxFractionDigits="2" type="number" />
+                        </h:outputText>
+                    </p:column>
+
+                                        
+                    <f:facet name="footer">
+                        <p:commandButton value="Seleccionar" actionListener="#{precontrato.desactivarMenu}" 
+                                         oncomplete="PF('insumos').hide();" 
+                                         update=":contratForm:tblContrats, :contratForm:tipoContto" />
+                    </f:facet>
+                    
+                </p:dataTable>
+            </h:form>
+
+        </p:dialog>
+
+
+        
+    </h:body>
+</html>
+

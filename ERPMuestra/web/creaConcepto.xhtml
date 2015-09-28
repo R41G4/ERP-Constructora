@@ -1,0 +1,312 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Crear Concepto</title>
+    </h:head>
+    <h:body>
+        <p:panel>
+            <f:facet name="header">
+                Crear concepto
+            </f:facet>
+            
+            <h:form id="frmCrear" >
+                <h:panelGrid id="grdCrear" columns="4" >
+                    <h:outputLabel for="proy" value="Proyecto"  />
+                    <p:inputText id="proy" value="#{crearConcepto.proyecto}" onclick="PF('dialProy').show();" />
+                    
+                    <h:outputLabel for="pres" value="Presupuesto"  />
+                    <p:inputText id="pres" value="#{crearConcepto.presupuesto}" onclick="PF('dialPres').show();" />
+                                                            
+                    <h:outputLabel for="codSub" value="Partida" />
+                    <p:inputText id="codSub" value="#{crearConcepto.codPrtda}" onclick="PF('partDial').show();" />
+                    
+                    <h:outputLabel for="subPrt" value="SubPartida" />
+                    <p:inputText id="subPrt" value="#{crearConcepto.subPrtda}" onclick="PF('subPartDial').show();" />
+                    
+                    
+                    <h:outputLabel for="tipo" value="Concepto" />
+                    <p:selectOneMenu id="tipo" value="#{crearConcepto.famConcepto}" >
+                        <f:selectItem itemLabel="Seleccionar" itemValue=""  />
+                        <f:selectItems value="#{crearConcepto.listaStFamConc}"  />
+                        <p:ajax event="change" listener="#{crearConcepto.crearCodigo}" update="codigo" />
+                    </p:selectOneMenu>
+                    
+                    <h:outputLabel for="codigo" value="Código de concepto" />
+                    <p:inputText id="codigo" value="#{crearConcepto.codConcepto}" />
+                    
+                    <h:outputLabel for="desc" value="Descripción" />
+                    <p:inputTextarea id="desc" autoResize="false" maxlength="350" value="#{crearConcepto.descConc}" >
+                        
+                    </p:inputTextarea>
+                    
+                    <h:outputLabel for="unCon" value="Unidad" />
+                    <p:selectOneMenu value="#{crearConcepto.unidConcepto}" id="unCon" >
+                        <f:selectItem itemLabel="Seleccionar Unidad" itemValue="" />
+                        <f:selectItems value="#{crearConcepto.listUnid}" /> 
+                    </p:selectOneMenu>
+                    
+                    <h:outputLabel for="cant" value="Cantidad" />
+                    <p:inputText id="cant" value="#{crearConcepto.cantidad}" />
+                    
+                    <h:outputLabel for="pUnit" value="Precio Unitario" />
+                    <p:inputText id="pUnit" value="#{crearConcepto.presUnit}" />
+                    
+                    <h:outputLabel for="imp" value="Importe" />
+                    <p:inputText id="imp" value="#{crearConcepto.importe}" />
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                    <p:commandButton id="btnPart" value="Crear Partida" onclick="PF('creaPrtDial').show();" />
+                    <p:commandButton id="btnSubPart" value="Crear SubPartida" onclick="PF('creaSubPrtDial').show();" />
+                    <p:commandButton id="btnAgregar" value="Agregar Insumo" onclick="PF('insumo').show();" />
+                    <p:commandButton id="btnGuardar" value="Guardar" actionListener="#{crearConcepto.guardarConcepto}" 
+                                     update="frmCrear, :frmIns" />
+                </h:panelGrid>
+                <br/><br/>
+                <p:dataTable id="tblIns" value="#{crearConcepto.listaIns}" var="ins" rowKey="#{ins.id_insumo}" >
+
+                    <p:column headerText="Código Insumo" >
+                        <h:outputText value="#{ins.codInsumo}" />
+                    </p:column>
+
+                    <p:column headerText="Descripción" >
+                        <h:outputText value="#{ins.descripIns}" />
+                    </p:column>
+
+                    <p:column headerText="Unidad" >
+                        <h:outputText value="#{ins.unidadIns}" />
+                    </p:column>
+
+                    <p:column headerText="Cantidad" >
+                        <h:outputText value="#{ins.cantIns}" >
+                            <f:convertNumber pattern="###,###,###,###.00" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Precio Unitario" >
+                        <h:outputText value="#{ins.costoIns}" >
+                            <f:convertNumber currencySymbol="$" type="currency" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Importe" >
+                        <h:outputText value="#{ins.importeIns}" >
+                            <f:convertNumber currencySymbol="$" type="currency" />
+                        </h:outputText>
+                    </p:column>
+
+                </p:dataTable>
+                
+            </h:form>
+            
+            <f:facet name="footer">
+                Agregar concepto al presupuesto
+            </f:facet>
+        </p:panel>
+        
+        <p:dialog header="Proyectos" widgetVar="dialProy" resizable="false" modal="true" width="400px" closeOnEscape="true" >
+            <h:form>
+                <p:dataTable id="tblProy" value="#{crearConcepto.listaProy}" var="p" rowKey="#{p.id_proyecto}" 
+                             selection="#{crearConcepto.proySel}" selectionMode="single" 
+                         paginator="true" rows="15" scrollable="true" style="width: 360px">
+
+                <p:column headerText="No. Proyecto"  >
+                    <h:outputText value="#{p.id_proyecto}" />
+                </p:column>
+
+                <p:column headerText="Proyecto"  >
+                    <h:outputText value="#{p.proyecto}" />
+                </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{crearConcepto.obtenerProyecto}" 
+                        update=":frmCrear:proy,:presForm:tblPres"
+                        oncomplete="PF('dialProy').hide();" />
+
+            </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Presupuesto" widgetVar="dialPres" resizable="false" modal="true" width="400px" closeOnEscape="true" >
+            <h:form id="presForm" >
+                <p:dataTable id="tblPres" value="#{crearConcepto.listaPres}" var="pres" rowKey="#{pres.id_presupuesto}" 
+                             selection="#{crearConcepto.presB}" selectionMode="single" 
+                         paginator="true" scrollable="true" style="width: 360px">
+
+                <p:column headerText="No. Presupuesto"  >
+                    <h:outputText value="#{pres.id_presupuesto}" />
+                </p:column>
+
+                <p:column headerText="Presupuesto"  >
+                    <h:outputText value="#{pres.presupuesto}" />
+                </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{crearConcepto.obtenerPresupuesto}" 
+                            update=":frmCrear:pres, :frmPart:tblPart"
+                        oncomplete="PF('dialPres').hide();" />
+
+            </p:dataTable>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Crear Insumo" widgetVar="insumo" resizable="false" modal="true" closeOnEscape="true" >
+            <h:form id="frmIns" >
+                <h:panelGrid id="grdIns" columns="4" >
+                    
+                    <h:outputLabel for="selTipIns" value="Tipo de Insumo" />
+                    <p:selectOneMenu value="#{crearConcepto.tipoIns}" id="selTipIns" >
+                        <f:selectItem itemLabel="Seleccionar Tipo" itemValue="" />
+                        <f:selectItem itemLabel="Materiales" itemValue="mat" />
+                        <f:selectItem itemLabel="SubContratos" itemValue="sc" />
+                        <p:ajax event="change" listener="#{crearConcepto.filtrarFamiliaIns()}" update="selFamilia" />
+                    </p:selectOneMenu>
+                    
+                    <h:outputLabel for="selFamilia" value="Clave y Descripcion" />
+                    <p:selectOneMenu value="#{crearConcepto.familia}" id="selFamilia" >
+                        <f:selectItem itemLabel="Seleccionar Familia" itemValue="" />
+                        <f:selectItems value="#{crearConcepto.catString}" />
+                        <p:ajax event="change" listener="#{crearConcepto.filtrarSubFamilias}" update="selSubFamilia" />
+                    </p:selectOneMenu>
+                    
+                    <h:outputLabel for="selSubFamilia" value="Código de Insumo" />
+                    <p:selectOneMenu value="#{crearConcepto.cveInsumo}" id="selSubFamilia" >
+                        <f:selectItem itemLabel="Seleccionar Familia" itemValue="" />
+                        <f:selectItems value="#{crearConcepto.listSubFam}" />
+                        
+                    </p:selectOneMenu>
+                    
+                                       
+                    
+                    <h:outputLabel for="descIns" value="Descripción" />
+                    <p:inputTextarea id="descIns" value="#{crearConcepto.descIns}" autoResize="false" />
+                    
+                    <h:outputLabel for="un" value="Unidad" />
+                    <p:selectOneMenu value="#{crearConcepto.unidad}" id="un" >
+                        <f:selectItem itemLabel="Seleccionar Unidad" itemValue="" />
+                        <f:selectItems value="#{crearConcepto.listUnid}" /> 
+                    </p:selectOneMenu>
+                    
+                    <h:outputLabel for="" value="Cantidad" />
+                    <p:inputText id="cantIns" value="#{crearConcepto.cantIns}" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                        
+                    <h:outputLabel for="" value="Precio Unitario" />
+                    <p:inputText id="insPresUnit" value="#{crearConcepto.presUnitIns}" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                    <h:outputLabel for="impIns" value="Importe" />
+                    <p:inputText id="impIns" value="#{crearConcepto.impIns}" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                    <p:commandButton id="btnAgregaIns" value="Agregar" actionListener="#{crearConcepto.agregarInsumo}" 
+                                     update=":frmCrear:tblIns, frmIns" oncomplete="PF('insumo').hide();" />
+                    <p:commandButton id="btnCancelAdd" value="Cancelar" />
+                    
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Lista Consecutivos" widgetVar="conDial" resizable="false" modal="true" closeOnEscape="true" >
+            <h:form id="frmConc" >
+                <p:dataTable id="tblConc" value="#{crearConcepto.listConcep}" var="c" rowKey="#{c.numConcepto}" paginator="true"
+                             rows="10">
+                    
+                    <p:column headerText="Consecutivo" >
+                        <h:outputText value="#{c.numConcepto}" />
+                    </p:column>
+                    
+                    <p:column headerText="Código" >
+                        <h:outputText value="#{c.codConcepto}" />
+                    </p:column>
+                    
+                    <p:column headerText="Descripción" >
+                        <h:outputText value="#{c.descripcion}" />
+                    </p:column>
+                    
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Lista Partidas" widgetVar="partDial" resizable="false" modal="true" closeOnEscape="true" >
+            <h:form id="frmPart" >
+                <p:dataTable id="tblPart" value="#{crearConcepto.listaPB}" var="part" rowKey="#{part.id_partida}"
+                             paginator="true" rows="10" selectionMode="single" selection="#{crearConcepto.partSel}" >
+                    
+                    <p:column headerText="Código de Partida">
+                        <h:outputText value="#{part.nivel}" />
+                    </p:column>
+                    
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="#{part.descripcion}" />
+                    </p:column>
+                    
+                    <p:ajax event="rowSelect" listener="#{crearConcepto.obtenerPartida}" 
+                            oncomplete="PF('partDial').hide();" update=":frmCrear:codSub, :frmSubPart:tblSubPart" />
+                    
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Lista SubPartidas" widgetVar="subPartDial" resizable="false" modal="true" closeOnEscape="true" >
+            <h:form id="frmSubPart" >
+                <p:dataTable id="tblSubPart" value="#{crearConcepto.listSubPrt}" var="part" rowKey="#{part.id_partida}"
+                             paginator="true" rows="10" selectionMode="single" selection="#{crearConcepto.subPrtSel}" >
+                    
+                    <p:column headerText="Código de Partida">
+                        <h:outputText value="#{part.nivel}" />
+                    </p:column>
+                    
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="#{part.descripcion}" />
+                    </p:column>
+                    
+                    <p:ajax event="rowSelect" listener="#{crearConcepto.obtenerSubPartida}" 
+                            oncomplete="PF('subPartDial').hide();" update=":frmCrear:subPrt" />
+                    
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Crear Partida" widgetVar="creaPrtDial" resizable="false" modal="true" closeOnEscape="true" >
+            <h:form id="frmCreaPrt" >
+                <h:panelGrid id="grdCrearPrt" columns="4" >
+                    
+                    <h:outputLabel for="cvePart" value="Clave Partida" />
+                    <p:inputText id="cvePart" value="#{crearConcepto.creaPrtCve}" />
+                    
+                    <h:outputLabel for="descPart" value="Descripción" />
+                    <p:inputText id="descPart" value="#{crearConcepto.creaPrtDesc}" />
+                    
+                    <p:commandButton id="btnCrea" value="Guardar" actionListener="#{crearConcepto.guardarNuevaPartida}"
+                                     oncomplete="PF('creaPrtDial').hide();" update=":frmPart:tblPart" />
+                    
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Crear SubPartida" widgetVar="creaSubPrtDial" resizable="false" modal="true" closeOnEscape="true" >
+            <h:form id="frmCreaSubPrt" >
+                <h:panelGrid id="grdCrearSubPrt" columns="4" >
+                    <h:outputLabel for="cveSubPart" value="Clave SubPartida" />
+                    <p:inputText id="cveSubPart" value="#{crearConcepto.creaSubPrtCve}" />
+                    
+                    <h:outputLabel for="descSubPart" value="Descripción SubPartida" />
+                    <p:inputText id="descSubPart" value="#{crearConcepto.creaSubPrtDesc}" />
+                    
+                    <p:commandButton id="btnCrea" value="Guardar" actionListener="#{crearConcepto.guardarNuevaSubPrtda}"
+                                     oncomplete="PF('creaSubPrtDial').hide();" update=":frmSubPart:tblSubPart" />
+                    
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+    </h:body>
+
+    
+</html>
+

@@ -1,0 +1,278 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facturas</title>
+    </h:head>
+    <h:body>
+        <p:panel>
+            <f:facet name="header">
+                Facturas
+            </f:facet>
+            
+            <h:form id="frmFacturas" >
+                <p:messages id="msgEstim" showDetail="true" autoUpdate="true" closable="true" />
+                <h:panelGrid id="grdFactura" columns="6" >
+                    
+                    <h:outputLabel for="proy" value="Proyecto" />
+                    <p:inputText id="proy" value="#{factura.id_proyecto}" onclick="PF('tabProy').show();" />
+                    
+                    <h:outputLabel for="pres" value="Presupuesto" />
+                    <p:inputText id="pres" value="#{factura.id_presup}" onclick="PF('dialPres').show();" />
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                    <h:outputLabel for="selTipo" value="Tipo de Pago" />
+                    <p:selectOneMenu id="selTipo" value="#{factura.tipoPago}"  >
+                        <f:selectItem itemLabel="Seleccionar Tipo" itemValue="" />
+                        <f:selectItem itemLabel="Anticipo Contratista" itemValue="anticipo" />
+                        <f:selectItem itemLabel="Estimación" itemValue="estima" />
+                        <f:selectItem itemLabel="Anticipo Orden de Compra" itemValue="antOC" />
+                        <f:selectItem itemLabel="Orden de compra" itemValue="compra" />
+
+                    </p:selectOneMenu>
+                    
+                    <h:panelGroup/>
+                    
+                    
+                    <p:commandButton id="btnBuscar" value="Buscar" actionListener="#{factura.buscarPagos}" 
+                                 update=":frmPagos:tblPagos" oncomplete="PF('dialPago').show();"   />
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                    
+                    
+                    <h:outputText value="Datos de Control" style="font-size: larger; font-style: italic" />
+                   
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                    <h:outputLabel for="importe" value="Importe Origen" />
+                    <p:inputText id="importe" value="#{factura.importeEst}" style="margin-right: 20px" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                    <h:outputLabel for="impAcum" value="Facturado" />
+                    <p:inputText id="impAcum" value="#{factura.importeAcum}" style="margin-right: 20px" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                    <h:outputLabel for="imprRest" value="Por Facturar" />
+                    <p:inputText id="imprRest" value="#{factura.importeRest}" style="margin-right: 20px" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                </h:panelGrid>
+                <br/><br/>
+                
+                <h:outputText value="Datos de la Factura" style="font-size: larger; font-style: italic" />
+                <br/><br/>
+                <h:outputLabel for="contratista" value="Beneficiario" />
+                <p:inputText id="contratista" value="#{factura.contratista}" 
+                                     readonly="true" style="width: 588px; margin-left: 5.2em" />
+                <h:panelGrid id="grdDatosFac" columns="4" >
+                    
+                    <h:panelGroup/>
+                    
+                    <h:panelGroup >
+                        
+                    </h:panelGroup>
+                    <h:panelGroup/><h:panelGroup/>
+                    
+                    
+                    
+                    <h:outputLabel for="importeFac" value="Importe" />
+                    <p:inputText id="importeFac" value="#{factura.importe}" >
+                        <p:ajax event="change" listener="#{factura.actualizarImpFactura}" update="grdDatosFac" />
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                    <h:outputLabel for="noFactura" value="No. de Factura" />
+                    <p:inputText id="noFactura" value="#{factura.noFactura}" required="#{factura.factura}" />
+                    
+                    <h:outputLabel for="amortAntcpo" value="Amortización Anticipo" />
+                    <p:inputText id="amortAntcpo" value="#{factura.amorAntcpo}" readonly="true" >
+                        
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                    <h:outputLabel for="retGtia" value="Retención de la Garantía" />
+                    <p:inputText id="retGtia" value="#{factura.retFdoGtia}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                    <h:outputLabel for="ivaFac" value="IVA" />
+                    <p:inputText id="ivaFac" value="#{factura.iva}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                    <h:outputLabel for="rtnRenta" value="Retenciones Renta" />
+                    <p:inputText id="rtnRenta" value="#{factura.rtnRenta}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                    <h:outputLabel for="rtnFlete" value="Retenciones Fletes" />
+                    <p:inputText id="rtnFlete" value="#{factura.rtnFlete}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                    <h:outputLabel for="totalFact" value="Importe Total" />
+                    <p:inputText id="totalFact" value="#{factura.total}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                    
+                    <h:outputLabel for="date" value="Fecha" />
+                    <p:inputText id="date" value="#{factura.dateNow}" readonly="true" />
+                    
+                </h:panelGrid> 
+                
+                <p:commandButton id="btnRegistrar" value="Registrar Factura" onclick="PF('dialConfirm').show();" 
+                                 update=":frmConfirm"/>
+                
+            </h:form>
+            <f:facet name="footer">
+                Datos del Pago que se va a generar
+            </f:facet>
+        </p:panel>
+        
+        <p:dialog widgetVar="dialConfirm" resizable="false" header="Advertencia!" modal="true" >
+            <h:form id="frmConfirm" >
+                <h:outputText value="¿Está seguro que desea guardar la factura con estos datos?" 
+                              style="font-size: larger; font-style: italic" />
+                <br/><br/>
+                <h:panelGrid id="grdConf" columns="4" >
+                    
+
+                    <p:outputLabel for="factConf" value="Factura" />
+                    <p:inputText id="factConf" value="#{factura.noFactura}" readonly="true" />
+
+                    <p:outputLabel for="impConf" value="Importe" />
+                    <p:inputText id="impConf" value="#{factura.importe}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+
+                    <p:outputLabel for="amortConf" value="Amortización" />
+                    <p:inputText id="amortConf" value="#{factura.amorAntcpo}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+
+                    <p:outputLabel for="confGtia" value="Retención Garantía" />
+                    <p:inputText id="confGtia" value="#{factura.retFdoGtia}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+
+                    <p:outputLabel for="ivaConf" value="IVA" />
+                    <p:inputText id="ivaConf" value="#{factura.iva}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+
+                    <p:outputLabel for="rentConf" value="Retención Renta" />
+                    <p:inputText id="rentConf" value="#{factura.rtnRenta}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+
+                    <p:outputLabel for="fleteConf" value="Retención Flete" />
+                    <p:inputText id="fleteConf" value="#{factura.rtnFlete}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+
+                    <p:outputLabel for="totConf" value="Total" />
+                    <p:inputText id="totConf" value="#{factura.total}" readonly="true" >
+                        <f:convertNumber pattern="###,###,###,###.00" />
+                    </p:inputText>
+                </h:panelGrid>
+                <p:commandButton id="btnConfirmar" value="Confirmar" actionListener="#{factura.registrarFactura}" 
+                                 oncomplete="PF('dialConfirm').hide();" />
+                
+                <p:commandButton id="btnCancel" value="Cancelar" onclick="PF('dialConfirm').hide();" />
+                
+            </h:form>
+        </p:dialog> 
+        
+        <!--        Tabla de proyecto-->
+        <p:dialog widgetVar="tabProy" resizable="false" header="Proyectos" modal="true" closeOnEscape="true" >
+            
+            <h:form id="tabProyects" >
+                
+                <p:dataTable id="tbProy" value="#{factura.listProy}" var="cont" rowKey="#{cont.id_proyecto}"
+                             selection="#{factura.ps}" selectionMode="single" paginator="true" rows="15" >
+                
+                    
+                    <p:column headerText="No. Proyecto" >
+                        <h:outputText value="#{cont.id_proyecto}" />
+                    </p:column>
+                    
+                    <p:column headerText="Proyecto" >
+                        <h:outputText value="#{cont.proyecto}" />
+                    </p:column>
+                    
+                    <p:ajax event="rowSelect" listener="#{factura.obtenerProyecto}" 
+                            update=":frmFacturas:proy, :presForm:tblPres" oncomplete="PF('tabProy').hide();" />
+                
+                </p:dataTable>
+                
+                
+                
+            </h:form>
+            
+        </p:dialog>
+        
+        <!--        Tabla presupuesto-->
+        <p:dialog header="Presupuesto" widgetVar="dialPres" resizable="false" modal="true" width="400px" >
+            <h:form id="presForm" >
+                <p:dataTable id="tblPres" value="#{factura.listaPres}" var="pres" rowKey="#{pres.id_presupuesto}" 
+                             selection="#{factura.presB}" selectionMode="single" 
+                             paginator="true" rows="10" >
+
+                    <p:column headerText="No. Presupuesto"  >
+                        <h:outputText value="#{pres.id_presupuesto}" />
+                    </p:column>
+
+                    <p:column headerText="Presupuesto"  >
+                        <h:outputText value="#{pres.presupuesto}" />
+                    </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{factura.obtenerPresupuesto}" 
+                            update=":frmFacturas:pres" oncomplete="PF('dialPres').hide();" />  
+
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+        
+        <!--        Tabla Pagos-->
+        <p:dialog widgetVar="dialPago" resizable="false" modal="true" closeOnEscape="true" header="Pagos" >            
+            <h:form id="frmPagos" >
+               <p:dataTable id="tblPagos" value="#{factura.listPagos}" var="pag" rowKey="#{pag.id_pago}" 
+                             selection="#{factura.pb}" selectionMode="single" >
+                
+                    <p:column headerText="No. de Orden" >
+                       <h:outputText value="#{pag.id_pago}" />
+                    </p:column> 
+                   
+                   <p:column headerText="Contratista" >
+                        <h:outputText value="#{pag.contratista}" />
+                    </p:column>
+                    
+                    <p:column headerText="Importe" >
+                        <h:outputText value="#{pag.importeEstimacion}" >
+                            <f:convertNumber currencySymbol="$" type="currency" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    
+                   
+                   <p:ajax event="rowSelect" listener="#{factura.seleccionarPago}" 
+                           update=":frmFacturas:grdDatosFac, :frmFacturas:grdFactura, :frmFacturas:contratista" oncomplete="PF('dialPago').hide();" />
+                    
+                </p:dataTable> 
+            </h:form>
+        </p:dialog>
+        
+
+
+    </h:body>
+</html>
+

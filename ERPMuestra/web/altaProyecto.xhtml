@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>ERP TunnigSys</title>
+        <link rel="stylesheet" type="text/css" href="estilos.css" />
+    </h:head>
+    <h:body class="pg" >
+        <p:panel header="Alta de Proyecto" footer="Registro de Proyectos">
+        <h:form id="formAlta" title="Proyectos" >
+            <p:growl id="msjRegistro" showDetail="true" sticky="true" />
+            <p:fieldset legend="Generales" style="margin-bottom:20px"  >
+                
+                <h:panelGrid columns="4" cellspacing="10px" >
+
+                    <p:outputLabel for="nomProy" value="Proyecto: " />
+                    <p:inputText id="nomProy" value="#{altaMBean.proyecto}" required="true" />
+
+                    <p:outputLabel for="contto" value="No. de Contrato: " />
+                    <p:inputText id="contto" value="#{altaMBean.numContrato}" required="true" />
+
+                    <p:outputLabel for="tipoContto" value="Tipo de Contrato: " />
+                    <p:inputText id="tipoContto" value="#{altaMBean.contrato}" required="true" />
+
+                    <p:outputLabel for="impContto" value="Importe Contrato: " />
+                    <p:inputText id="impContto" value="#{altaMBean.importeFormat}" maxlength="20"  
+                                 onfocus="PF('dialImporte').show();" required="true" >
+
+                        <p:ajax event="change" listener="#{altaMBean.calculaPorcentajes}"
+                                update="impContto, fGarantiaPct, fianzaAnt, fianzaCump,
+                                fianzaVic" />
+
+                    </p:inputText>
+
+                    <p:outputLabel for="formPago" value="Forma de Pago: " />
+                    <p:inputText id="formPago" value="#{altaMBean.formaDPago}" required="true"/>
+
+                    <p:outputLabel for="anticipo" value="Anticipo: " />
+                    <h:panelGroup>
+                        <p:inputText id="pctAntcpo" value="#{altaMBean.pctAntcpo}" 
+                                     style="width: 50px; margin-right: 10px" >
+                            <p:ajax event="change" listener="#{altaMBean.calcularAntcpo}" update="anticipo, antcpoTot" />
+                        </p:inputText>
+                        <p:inputText id="anticipo" value="#{altaMBean.cadAntcpo}" readonly="true" />
+                    </h:panelGroup>
+                    <p:outputLabel for="fechIni" value="Fecha Inicio" />
+                    <p:calendar id="fechIni" value="#{altaMBean.fechInicio}" required="true" />
+
+                    <p:outputLabel for="fechFin" value="Fecha Final" />
+                    <p:calendar id="fechFin" value="#{altaMBean.fechFin}" required="true" />
+
+                    <p:outputLabel for="cliente" value="Cliente: " />
+                    <p:inputText id="cliente" value="#{altaMBean.cliente}" required="true"/>
+                    
+                    <p:outputLabel for="cCostos" value="Ctro. Costos: " />
+                    <p:inputText id="cCostos" value="#{altaMBean.centroC}" onclick="PF('costos').show();" />
+                    
+                    
+                    
+                    
+                </h:panelGrid>
+                
+            </p:fieldset>
+            
+            <p:fieldset legend="Dirección del Proyecto" style="margin-bottom: 20px" >
+               <h:panelGrid columns="2" cellspacing="10px" >
+                    <p:outputLabel for="calle" value="Calle: *" style="margin-right: 50px"/>
+                    <p:inputText id="calle" value="#{altaMBean.calle}" 
+                                 style="width: 400px; margin-left: 48px" />
+
+                    <p:outputLabel for="numExt" value="Número Exterior: *" style="margin-right: 50px"/>
+                    <p:inputText id="numExt" value="#{altaMBean.numExt}" style="margin-left: 48px" />
+                    
+                   
+
+                    <p:outputLabel for="colonia" value="Colonia: *" style="margin-right: 50px"/>
+                    <p:inputText id="colonia" value="#{altaMBean.colonia}" style="margin-left: 48px" />
+                    
+                    <p:outputLabel for="cp" value="Código Postal: *" style="margin-right: 50px"/>
+                    <p:inputText id="cp" value="#{altaMBean.codPst}" style="margin-left: 48px" />
+                    
+                    <p:outputLabel for="city" value="Ciudad: *" style="margin-right: 50px"/>
+                    <p:inputText id="city" value="#{altaMBean.ciudad}" style="margin-left: 48px" />
+                    
+                    <p:outputLabel for="ph" value="Teléfono: *" style="margin-right: 50px"/>
+                    <p:inputText id="ph" value="#{altaMBean.telefono}" style="margin-left: 48px" />
+                    
+                </h:panelGrid> 
+            </p:fieldset>
+            
+            <p:fieldset legend="Seguros y Fianzas" style="margin-bottom: 20px" >
+                
+                <h:panelGrid columns="4" cellspacing="10px" >
+                    
+                    <h:panelGroup/>
+                    <h:panelGroup>
+                        <p:outputLabel value="Porcentaje" style="margin-right: 40px"/>
+                        <p:outputLabel value="Importe" />
+                    </h:panelGroup>
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+
+
+                    <p:outputLabel for="fGarantiaPct" value="Fondo de Garantía: " />
+                    <h:panelGroup>
+
+                        <p:inputText id="fGarantiaPct" value="#{altaMBean.pctGarantia}" 
+                                     style="width: 50px; margin-right: 10px" >
+                            <p:ajax event="change" listener="#{altaMBean.calculaPorcentajes}" 
+                                    update="fGarantia" />
+                        </p:inputText> %
+
+                        <p:inputText id="fGarantia" value="#{altaMBean.garantia}" 
+                                     style="margin-left: 20px" readonly="true" >
+
+                        </p:inputText>
+
+                    </h:panelGroup>
+
+
+
+
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                    <p:outputLabel for="fianzaAnt" value="Fianza de anticipo: " /> 
+                    <h:panelGroup>
+
+                        <p:inputText id="fianzaAnt" value="#{altaMBean.pctFianzaAntcpo}" 
+                                     style="width: 50px; margin-right: 10px" >
+
+                            <p:ajax event="change" listener="#{altaMBean.calculaPorcentajes()}"
+                                    update="importeAnt, fianzaTot" />
+
+                        </p:inputText> %
+
+                        <p:inputText id="importeAnt" value="#{altaMBean.fianzaAntcpo}" 
+                                     style="margin-left: 20px" readonly="true" >
+
+
+
+                        </p:inputText>
+
+
+
+                    </h:panelGroup>
+
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+
+                    <p:outputLabel for="fianzaCump" value="Fianza Cumplimiento: " />
+                    <h:panelGroup>
+
+                        <p:inputText id="fianzaCump" value="#{altaMBean.pctCumplimiento}" 
+                                     style="width: 50px; margin-right: 10px" >
+
+                            <p:ajax event="change" listener="#{altaMBean.calculaPorcentajes}" 
+                                    update="importeCump, fianzaTot" />
+                        </p:inputText> %
+
+                        <p:inputText id="importeCump" value="#{altaMBean.cumplimiento}" 
+                                     style="margin-left: 20px" readonly="true" >
+
+
+                        </p:inputText>
+                    </h:panelGroup>
+
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+
+                    <p:outputLabel for="fianzaVic" value="Fianza Vicios Ocultos: " />
+                    <h:panelGroup>
+
+
+
+                        <p:inputText id="fianzaVic" value="#{altaMBean.pctVicios}" 
+                                     style="width: 50px; margin-right: 10px" >
+
+                            <p:ajax event="change" listener="#{altaMBean.calculaPorcentajes}" 
+                                    update="importeVic, fianzaTot" />
+                        </p:inputText> %
+
+                        <p:inputText id="importeVic" value="#{altaMBean.vicios}" 
+                                     style="margin-left: 20px" readonly="true" >
+
+                        </p:inputText>
+                    </h:panelGroup>
+
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+
+                    <p:outputLabel for="importeCiv" value="Responsabilidad Civil: " />
+                    <h:panelGroup>
+
+                        <p:inputText id="importeCiv" value="#{altaMBean.impRespCivil}" >
+                            <p:ajax event="change" listener="#{altaMBean.sumarRiesgos}" update="segurosTot" />
+                        </p:inputText>
+
+                    </h:panelGroup>
+
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+
+                    <p:outputLabel for="importeTerceros" value="Todo Riesgo: " />
+                    <h:panelGroup>
+
+                        <p:inputText id="importeTerceros" value="#{altaMBean.impTerceros}" >
+                            <p:ajax event="change" listener="#{altaMBean.sumarRiesgos}" update="segurosTot" />
+                        </p:inputText>
+                    </h:panelGroup>
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                    <p:outputLabel for="otrsRiesg" value="Otras Fianzas: " />
+                    <p:inputText id="otrsRiesg" value="#{altaMBean.otrosRiesg}" />
+
+                </h:panelGrid>
+               
+                <br/>
+            <p:outputLabel for="otros" value="Comentarios: " />
+            <p:inputTextarea id="otros" maxlength="200" cols="78"
+                                 autoResize="false" 
+                                 style="margin-left: 89px" value="#{altaMBean.otros}" />
+                
+            </p:fieldset>
+            
+            <p:fieldset legend="Totales" style="margin-bottom: 20px" >
+                <center>
+                    <h:outputLabel for="conttoTot" value="Contrato: " />
+                    <p:inputText id="conttoTot" value="#{altaMBean.importeFormat}" style="margin-left: 10px" readonly="true" />
+
+                    <h:outputLabel for="antcpoTot" value="Anticipos: " style="margin-left: 20px" />
+                    <p:inputText id="antcpoTot" value="#{altaMBean.cadAntcpo}" style="margin-left: 10px" readonly="true" />
+
+                    <h:outputLabel for="fianzaTot" value="Fianzas: " style="margin-left: 20px" />
+                    <p:inputText id="fianzaTot" value="#{altaMBean.sumaFianzasCad}" style="margin-left: 10px" readonly="true" />
+
+                    <h:outputLabel for="segurosTot" value="Seguros: " style="margin-left: 20px" />
+                    <p:inputText id="segurosTot" value="#{altaMBean.sumaRiesCad}" style="margin-left: 10px" readonly="true" />
+                </center>
+            </p:fieldset>
+            <br/>
+            <br/>
+            <p:commandButton value="Registrar" actionListener="#{altaMBean.crearRegistro}" 
+                             update="msjRegistro" />
+            
+            <p:commandLink value="Volver a Menú Proyectos" style="margin-left: 90px"/>
+            
+            <h:link value="Lista Proyectos" outcome="listaProyectos" style="margin-left: 90px" />
+            
+            <br/>
+            <br/>
+            <h:outputText value="* Campos obligatorios" style="font-family: serif; font-size: smaller" />
+            
+        </h:form>
+        </p:panel>
+        
+        
+        
+        <p:dialog header="Importe Contrato" widgetVar="dialImporte" resizable="false" modal="true">
+            <h:form>
+                <h:outputText value="Capture el importe del contrato" />
+                <p:inputText id="importe" value="#{altaMBean.importeContto}" />
+                <p:commandButton id="btnImporte" value="Aceptar" 
+                                 actionListener="#{altaMBean.calculaPorcentajes}" 
+                                 update=":formAlta:impContto, :formAlta:conttoTot" oncomplete="PF('dialImporte').hide();"/>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Centro de Costos" widgetVar="costos" resizable="false" modal="true" closeOnEscape="true" >
+            <h:form id="frmCostos" >
+                <h:panelGrid columns="2" >
+                    
+                    <p:outputLabel for="serie" value="Serie:" />
+                    <p:inputText id="serie" value="#{altaMBean.serie}" />
+                    
+                    <p:outputLabel for="year" value="Año del Contrato:" />
+                    <p:inputText id="year" value="#{altaMBean.yearCntrt}" />
+                    
+                    <p:outputLabel for="month" value="Mes del Contrato" />
+                    <p:inputText id="month" value="#{altaMBean.monthCntr}"  />
+                    
+                    <p:commandButton id="btnCosto" value="Ok" actionListener="#{altaMBean.generarCosto}" 
+                                     oncomplete="PF('costos').hide();" update=":formAlta:cCostos" />
+                    
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+    </h:body>
+</html>
+

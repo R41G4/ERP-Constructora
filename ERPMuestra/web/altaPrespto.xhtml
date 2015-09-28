@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Alta Presupuesto</title>
+    </h:head>
+    <h:body>
+        <h:form id="frmCreaPres" >
+            <p:growl id="growl" showDetail="true" life="5000" />
+            <p:panel>
+                <h:panelGrid id="grdPres" columns="4" >
+                    
+                    <h:outputLabel for="proy" value="Seleccionar proyecto" />
+                    <p:inputText id="proy" value="#{crear.proyecto}" onclick="PF('dialProy').show();" />
+                    
+                    <h:outputLabel for="pres" value="Presupuesto" />
+                    <p:inputText id="pres" value="#{crear.presupuesto}" />
+                    
+                </h:panelGrid>
+                
+                <h:panelGrid columns="1" >
+                    
+                    <p:commandButton id="btnGuardPres" value="Guardar" actionListener="#{crear.crearPresupuesto}" 
+                                     update="growl, frmCreaPres" />
+                </h:panelGrid>
+                    
+            </p:panel>
+        </h:form>
+        
+        
+        <p:dialog header="Proyectos" widgetVar="dialProy" resizable="false" modal="true" width="400px" closeOnEscape="true" >
+            <h:form>
+                <p:dataTable id="tblProy" value="#{crear.listaProy}" var="p" rowKey="#{p.id_proyecto}" 
+                             selection="#{crear.proySel}" selectionMode="single" 
+                         paginator="true" rows="15" scrollable="true" style="width: 360px">
+
+                <p:column headerText="No. Proyecto"  >
+                    <h:outputText value="#{p.id_proyecto}" />
+                </p:column>
+
+                <p:column headerText="Proyecto"  >
+                    <h:outputText value="#{p.proyecto}" />
+                </p:column>
+
+                    <p:ajax event="rowSelect" listener="#{crear.seleccionarProyecto}" 
+                        update=":frmCreaPres:proy"
+                        oncomplete="PF('dialProy').hide();" />
+
+            </p:dataTable>
+            </h:form>
+        </p:dialog>
+        
+    </h:body>
+</html>
+

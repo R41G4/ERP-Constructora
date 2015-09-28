@@ -1,0 +1,153 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: AppWorkspace;
+}
+
+#container {
+    
+    margin: 50px auto;
+    width: 90%;
+    
+    background-color: #FFFAF0;
+    padding-top: 30px;
+    /*padding-right: 30px; */
+    border-radius: 5px;
+    
+}
+
+#tit {
+    position: relative;
+    background: #C0C0C0;
+    padding: 10px 25px;
+    font-family: fantasy;
+    
+    
+    width: 40%;
+    margin-left: -20px;
+    margin-top: 0;
+    
+    -moz-box-shadow: 1px 1px 3px #292929;
+    -webkit-box-shadow: 1px 1px 3px #292929;
+    box-shadow: 1px 1px 3px #292929;
+    
+    /*-webkit-box-shadow: inset 8px -22px 56px 36px rgba(85,89,77,1);
+    -moz-box-shadow: inset 8px -22px 56px 36px rgba(85,89,77,1);
+    box-shadow: inset 8px -22px 56px 36px rgba(85,89,77,1);*/
+}
+
+.triang{
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 20px 10px 0;
+    border-color: transparent #008080 transparent transparent;
+    top: 103%;
+    left: 0;
+    position: absolute;
+}
+
+
+
+#menu {
+    float: left;
+    margin: 15px;
+    padding: 15px;
+    width: 10%;
+    
+    border-radius: 5px;
+    height: 300px;
+    
+    
+}
+
+#der {
+    width: 80%;
+    /*height: 270px;*/
+    margin: 15px;
+    padding: 15px;
+    float: left;
+    
+    /*-webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    background-image: url(img/cons3.jpg);*/
+}
+
+.pg {
+    float: left;
+    
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 150px;
+    
+}
+
+ul li {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: MenuText;
+    background: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+li ul {
+    position: absolute;
+    left: 149px;
+    top: 0;
+    display: none;
+}
+
+li:hover ul {
+    display: block;
+}
+
+.item {
+    cursor: pointer;
+    font-size: large;
+}
+
+#clear {
+    clear: both;
+    
+}
+
+a:link {
+    text-decoration: none;
+    color: #292929;
+}
+
+#imgIn {
+    width: 90%;
+    height: 350px;
+    margin: 0 auto;
+    display: block;
+    
+}
+
+#pie {
+    position: inherit;
+    background: #FF0000;
+    width: auto;
+    height: 70px;
+    border-radius:  0  0 5px 5px;
+    padding-top: 10px;
+}
+
+#pie p {
+    margin-left: 10px;
+    
+    color: #F8F8FF;
+}
+
