@@ -405,10 +405,12 @@ public class AltaMBean implements Serializable {
         altaBean.setContrato(getContrato());
         altaBean.setImporteContto(getImporteContto());
         altaBean.setFormaDPago(getFormaDPago());
+        altaBean.setPctAntcpo(getPctAntcpo());
         altaBean.setAnticipo(getAnticipo());
         altaBean.setFechInicio(getFechInicio());
         altaBean.setFechFin(getFechFin());
         altaBean.setCliente(getCliente());
+        altaBean.setcCostos(getCentroC());
         altaBean.setPctGarantia(getPctGarantia());
         altaBean.setImpGarantia(getImpGarantia());
         altaBean.setPctFianzaAntcpo(getPctFianzaAntcpo());

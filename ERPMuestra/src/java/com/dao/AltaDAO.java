@@ -290,10 +290,10 @@ public class AltaDAO {
             con.setAutoCommit(false);
             
             String sql = "Insert into proyecto (proyecto, numContrato, tipoContrato, importeContto, "
-                    + "formaDPago, anticipo, fechaInicio, FechaFin, "
-                    + "cliente, pctGarantia, impGarantia, pctFianzaAntcpo, impFianzaAntcpo, pctCumplimiento, "
+                    + "formaDPago, pctAnt, anticipo, fechaInicio, FechaFin, "
+                    + "cliente, centroCostos, pctGarantia, impGarantia, pctFianzaAntcpo, impFianzaAntcpo, pctCumplimiento, "
                     + "impCumplimiento, pctVicios, impVicios, pctRespCivil, impRespCivil, pctTerceros, "
-                    + "impTerceros, otros, otrosRiesgos) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "impTerceros, otros, otrosRiesgos) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             
             SimpleDateFormat sd = new SimpleDateFormat("yyyy/MM/dd");
             
@@ -310,20 +310,22 @@ public class AltaDAO {
             fecha = sd.format(ab.getFechFin());
             ps.setString(8, fecha);
             ps.setString(9, ab.getCliente());
-            ps.setFloat(10, ab.getPctGarantia());
-            ps.setBigDecimal(11, ab.getImpGarantia());
-            ps.setFloat(12, ab.getPctFianzaAntcpo());
-            ps.setBigDecimal(13, ab.getImpFianzaAntcpo());
-            ps.setFloat(14, ab.getPctCumplimiento());
-            ps.setBigDecimal(15, ab.getImpCumplimiento());
-            ps.setFloat(16, ab.getPctVicios());
-            ps.setBigDecimal(17, ab.getImpVicios());
-            ps.setFloat(18, ab.getPctRespCivil());
-            ps.setBigDecimal(19, ab.getImpRespCivil());
-            ps.setFloat(20, ab.getPctTerceros());
-            ps.setBigDecimal(21, ab.getImpTerceros());
-            ps.setString(22, ab.getOtros());
-            ps.setBigDecimal(23, ab.getOtrosRiesg());
+            ps.setString(10, ab.getcCostos());
+            ps.setFloat(11, ab.getPctGarantia());
+            ps.setBigDecimal(12, ab.getImpGarantia());
+            ps.setFloat(13, ab.getPctFianzaAntcpo());
+            ps.setBigDecimal(14, ab.getImpFianzaAntcpo());
+            ps.setFloat(15, ab.getPctCumplimiento());
+            ps.setBigDecimal(16, ab.getImpCumplimiento());
+            ps.setFloat(17, ab.getPctVicios());
+            ps.setBigDecimal(18, ab.getImpVicios());
+            ps.setFloat(19, ab.getPctRespCivil());
+            ps.setBigDecimal(20, ab.getImpRespCivil());
+            ps.setFloat(21, ab.getPctTerceros());
+            ps.setBigDecimal(22, ab.getImpTerceros());
+            ps.setString(23, ab.getOtros());
+            ps.setBigDecimal(24, ab.getOtrosRiesg());
+            ps.setFloat(25, ab.getPctAntcpo());
             ps.executeUpdate();
             
             String sql3 = "Select last_insert_id()";
