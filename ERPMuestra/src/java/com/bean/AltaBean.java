@@ -4,14 +4,12 @@
  */
 package com.bean;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- *
- * @author Mickey
- */
-public class AltaBean {
+
+public class AltaBean implements Serializable {
     
     private int idProyecto;
     private String proyecto;
@@ -42,6 +40,7 @@ public class AltaBean {
     private String otros;
     private BigDecimal otrosRiesg;
     private String cCostos;
+    private int id_cliente;
     
     /**
      * @return the proyecto
@@ -435,6 +434,20 @@ public class AltaBean {
      */
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    /**
+     * @return the id_cliente
+     */
+    public int getId_cliente() {
+        return id_cliente;
+    }
+
+    /**
+     * @param id_cliente the id_cliente to set
+     */
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
     }
     
 }

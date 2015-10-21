@@ -17,11 +17,9 @@ public class ConexionBD {
         
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/erp_versiondos", "appl_erp", "erp2015!");
-        }catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }catch(SQLException e) {
-            e.printStackTrace();
+            con = DriverManager.getConnection("jdbc:mysql://localhost/erp_versiondos", "root", "");
+        }catch(SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
         }
     }
     

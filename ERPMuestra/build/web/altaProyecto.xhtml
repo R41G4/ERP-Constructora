@@ -52,7 +52,7 @@
                     <p:calendar id="fechFin" value="#{altaMBean.fechFin}" required="true" />
 
                     <p:outputLabel for="cliente" value="Cliente: " />
-                    <p:inputText id="cliente" value="#{altaMBean.cliente}" required="true"/>
+                    <p:inputText id="cliente" value="#{altaMBean.cliente}" required="true" onclick="PF('dialClte').show();" />
                     
                     <p:outputLabel for="cCostos" value="Ctro. Costos: " />
                     <p:inputText id="cCostos" value="#{altaMBean.centroC}" onclick="PF('costos').show();" />
@@ -255,7 +255,25 @@
         </h:form>
         </p:panel>
         
-        
+        <p:dialog header="Eligir cliente" widgetVar="dialClte" resizable="false" modal="true" closeOnEscape="true" >
+            <h:form id="frmCte" >
+                <p:dataTable id="tblClte" value="#{altaMBean.listCte}" var="cte" rowKey="#{cte.id_cliente}" 
+                             selectionMode="single" paginator="true" rows="10" selection="#{altaMBean.cteSelected}" >
+                    
+                    <p:column headerText="Nombre o Razón Social" >
+                        <h:outputText value="#{cte.razon}" />
+                    </p:column>
+                    
+                    <p:column headerText="RFC" >
+                        <h:outputText value="#{cte.rfcCliente}" />
+                    </p:column>
+                    
+                    <p:ajax event="rowSelect" listener="#{altaMBean.seleccionarCliente}" oncomplete="PF('dialClte').hide();" 
+                            update=":formAlta:cliente" />
+                    
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
         
         <p:dialog header="Importe Contrato" widgetVar="dialImporte" resizable="false" modal="true">
             <h:form>

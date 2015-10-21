@@ -49,6 +49,7 @@
             
             <p:dialog header="Editar Proyecto" widgetVar="proyEdit" resizable="false" modal="true" closeOnEscape="true" >
                 <h:form id="proyEditForm" >
+                    <p:scrollPanel style="width: 900px; height: 400px" >
                     <p:fieldset legend="Editar #{altaMBean.proyecto}" style="margin-bottom: 20px">
                     <h:panelGrid columns="4">
                         <p:outputLabel for="proyTxt" value="Proyecto" />
@@ -101,7 +102,7 @@
                         </h:panelGroup>
                         
                         <p:outputLabel for="cliente" value="Cliente: " />
-                        <p:inputText id="cliente" value="#{altaMBean.cliente}" />
+                        <p:inputText id="cliente" value="#{altaMBean.cliente}" required="true" onclick="PF('dialClte').show();" />
                         
                         <p:outputLabel for="fGarantia" value="Fondo de Garantía: " />
                         <h:panelGroup>
@@ -190,11 +191,32 @@
                     
                         <p:commandButton id="btnCancelarEd" value="Cancelar" onclick="PF('proyEdit').hide();" />
                     </center>
-                    
+                    </p:scrollPanel>  
+                </h:form>
+            </p:dialog>
+            
+            <p:dialog header="Eligir cliente" widgetVar="dialClte" resizable="false" modal="true" closeOnEscape="true" >
+                <h:form id="frmCte" >
+                    <p:dataTable id="tblClte" value="#{altaMBean.listCte}" var="cte" rowKey="#{cte.id_cliente}" 
+                                 selectionMode="single" paginator="true" rows="10" selection="#{altaMBean.cteSelected}" >
+
+                        <p:column headerText="Nombre o Razón Social" >
+                            <h:outputText value="#{cte.razon}" />
+                        </p:column>
+
+                        <p:column headerText="RFC" >
+                            <h:outputText value="#{cte.rfcCliente}" />
+                        </p:column>
+
+                        <p:ajax event="rowSelect" listener="#{altaMBean.seleccionarCliente}" oncomplete="PF('dialClte').hide();" 
+                                update=":proyEditForm:cliente" />
+
+                    </p:dataTable>
                 </h:form>
             </p:dialog>
             
         </p:panel>
+        
         
         
     </h:body>

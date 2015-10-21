@@ -5,6 +5,7 @@
 package com.mbean;
 
 import com.bean.AltaBean;
+import com.bean.Cliente;
 import com.bean.Direccion;
 import com.bean.ProyectoBean;
 import com.conexion.ConexionBD;
@@ -15,6 +16,7 @@ import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -68,7 +70,7 @@ public class AltaMBean implements Serializable {
     private String fechIniCad;
     private String fechFinCad;
     
-    private ArrayList<AltaBean> listaProyectos = new ArrayList<AltaBean>();
+    private ArrayList<AltaBean> listaProyectos = new ArrayList<>();
     private ProyectoBean proySelect;
     private AltaBean proySelec;
     
@@ -90,6 +92,23 @@ public class AltaMBean implements Serializable {
     private String ciudad;
     private String telefono;
     
+    private List<Cliente> listCte = new ArrayList<>();
+    private Cliente cteSelected;
+    
+    private boolean cambioCte = false;
+    private int id_cliente;
+    
+    public void seleccionarCliente() {
+        setCliente(cteSelected.getRazon());
+        setId_cliente(cteSelected.getId_cliente());
+        setCambioCte(true);
+    }
+    
+    public void buscarClientes() {
+        ConexionBD c = new ConexionBD();
+        AltaDAO dao = new AltaDAO(c.getConexion());
+        setListCte(dao.buscarClientes());
+    }
     
     public void generarCosto() {
         setCentroC(serie+yearCntrt+monthCntr);
@@ -117,37 +136,75 @@ public class AltaMBean implements Serializable {
     
     public void guardarCambios() {
         
-        proySelec.setIdProyecto(getIdProyecto());
-        proySelec.setProyecto(getProyecto());
-        proySelec.setContrato(getContrato());
-        proySelec.setNumContrato(getNumContrato());
-        proySelec.setImporteContto(getImporteContto());
-        proySelec.setFormaDPago(getFormaDPago());
-        proySelec.setPctAntcpo(getPctAntcpo());
-        proySelec.setAnticipo(getAnticipo());
-        proySelec.setFechInicio(getFechInicio());
-        proySelec.setFechaIniCad(getFechIniCad());
-        proySelec.setFechFin(getFechFin());
-        proySelec.setFechaFinCad(getFechFinCad());
-        proySelec.setCliente(getCliente());
-        proySelec.setPctGarantia(getPctGarantia());
-        proySelec.setImpGarantia(getImpGarantia());
-        proySelec.setPctFianzaAntcpo(getPctFianzaAntcpo());
-        proySelec.setImpFianzaAntcpo(getImpFianzaAntcpo());
-        proySelec.setPctCumplimiento(getPctCumplimiento());
-        proySelec.setImpCumplimiento(getImpCumplimiento());
-        proySelec.setPctVicios(getPctVicios());
-        proySelec.setImpVicios(getImpVicios());
-        proySelec.setPctRespCivil(getPctRespCivil());
-        proySelec.setImpRespCivil(getImpRespCivil());
-        proySelec.setPctTerceros(getPctTerceros());
-        proySelec.setImpTerceros(getImpTerceros());
-        proySelec.setOtros(getOtros());
-        
         ConexionBD conexion = new ConexionBD();
         Connection con = conexion.getConexion();
         AltaDAO aDao = new AltaDAO(con);
-        aDao.editar(proySelec);
+        
+        if(cambioCte) {
+            proySelec.setIdProyecto(getIdProyecto());
+            proySelec.setProyecto(getProyecto());
+            proySelec.setContrato(getContrato());
+            proySelec.setNumContrato(getNumContrato());
+            proySelec.setImporteContto(getImporteContto());
+            proySelec.setFormaDPago(getFormaDPago());
+            proySelec.setPctAntcpo(getPctAntcpo());
+            proySelec.setAnticipo(getAnticipo());
+            proySelec.setFechInicio(getFechInicio());
+            proySelec.setFechaIniCad(getFechIniCad());
+            proySelec.setFechFin(getFechFin());
+            proySelec.setFechaFinCad(getFechFinCad());
+            proySelec.setCliente(getCliente());
+            proySelec.setPctGarantia(getPctGarantia());
+            proySelec.setImpGarantia(getImpGarantia());
+            proySelec.setPctFianzaAntcpo(getPctFianzaAntcpo());
+            proySelec.setImpFianzaAntcpo(getImpFianzaAntcpo());
+            proySelec.setPctCumplimiento(getPctCumplimiento());
+            proySelec.setImpCumplimiento(getImpCumplimiento());
+            proySelec.setPctVicios(getPctVicios());
+            proySelec.setImpVicios(getImpVicios());
+            proySelec.setPctRespCivil(getPctRespCivil());
+            proySelec.setImpRespCivil(getImpRespCivil());
+            proySelec.setPctTerceros(getPctTerceros());
+            proySelec.setImpTerceros(getImpTerceros());
+            proySelec.setOtros(getOtros());
+            proySelec.setId_cliente(cteSelected.getId_cliente());
+            
+            aDao.editarProyCliente(proySelec);
+            
+        }else {
+            proySelec.setIdProyecto(getIdProyecto());
+            proySelec.setProyecto(getProyecto());
+            proySelec.setContrato(getContrato());
+            proySelec.setNumContrato(getNumContrato());
+            proySelec.setImporteContto(getImporteContto());
+            proySelec.setFormaDPago(getFormaDPago());
+            proySelec.setPctAntcpo(getPctAntcpo());
+            proySelec.setAnticipo(getAnticipo());
+            proySelec.setFechInicio(getFechInicio());
+            proySelec.setFechaIniCad(getFechIniCad());
+            proySelec.setFechFin(getFechFin());
+            proySelec.setFechaFinCad(getFechFinCad());
+            proySelec.setCliente(getCliente());
+            proySelec.setPctGarantia(getPctGarantia());
+            proySelec.setImpGarantia(getImpGarantia());
+            proySelec.setPctFianzaAntcpo(getPctFianzaAntcpo());
+            proySelec.setImpFianzaAntcpo(getImpFianzaAntcpo());
+            proySelec.setPctCumplimiento(getPctCumplimiento());
+            proySelec.setImpCumplimiento(getImpCumplimiento());
+            proySelec.setPctVicios(getPctVicios());
+            proySelec.setImpVicios(getImpVicios());
+            proySelec.setPctRespCivil(getPctRespCivil());
+            proySelec.setImpRespCivil(getImpRespCivil());
+            proySelec.setPctTerceros(getPctTerceros());
+            proySelec.setImpTerceros(getImpTerceros());
+            proySelec.setOtros(getOtros());
+            
+            aDao.editar(proySelec);
+            
+        }
+        
+        
+        
         
         
     } 
@@ -242,6 +299,7 @@ public class AltaMBean implements Serializable {
         setTerceros("$" + " " + formato.format(getImpTerceros()));
         setOtros(proySelec.getOtros());
         setOtrosRiesg(proySelec.getOtrosRiesg());
+        setId_cliente(proySelec.getId_cliente());
         sumarFianzas();
         sumarRiesgos();
     }
@@ -347,10 +405,12 @@ public class AltaMBean implements Serializable {
         altaBean.setContrato(getContrato());
         altaBean.setImporteContto(getImporteContto());
         altaBean.setFormaDPago(getFormaDPago());
+        altaBean.setPctAntcpo(getPctAntcpo());
         altaBean.setAnticipo(getAnticipo());
         altaBean.setFechInicio(getFechInicio());
         altaBean.setFechFin(getFechFin());
         altaBean.setCliente(getCliente());
+        altaBean.setcCostos(getCentroC());
         altaBean.setPctGarantia(getPctGarantia());
         altaBean.setImpGarantia(getImpGarantia());
         altaBean.setPctFianzaAntcpo(getPctFianzaAntcpo());
@@ -365,6 +425,7 @@ public class AltaMBean implements Serializable {
         altaBean.setImpTerceros(getImpTerceros());
         altaBean.setOtros(getOtros());
         altaBean.setOtrosRiesg(getOtrosRiesg());
+        altaBean.setId_cliente(cteSelected.getId_cliente());
         
         conexion = new ConexionBD();
         con = conexion.getConexion();
@@ -1067,6 +1128,63 @@ public class AltaMBean implements Serializable {
      */
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    /**
+     * @return the cteSelected
+     */
+    public Cliente getCteSelected() {
+        return cteSelected;
+    }
+
+    /**
+     * @param cteSelected the cteSelected to set
+     */
+    public void setCteSelected(Cliente cteSelected) {
+        this.cteSelected = cteSelected;
+    }
+
+    /**
+     * @return the listCte
+     */
+    public List<Cliente> getListCte() {
+        buscarClientes();
+        return listCte;
+    }
+
+    /**
+     * @param listCte the listCte to set
+     */
+    public void setListCte(List<Cliente> listCte) {
+        this.listCte = listCte;
+    }
+
+    /**
+     * @return the cambioCte
+     */
+    public boolean isCambioCte() {
+        return cambioCte;
+    }
+
+    /**
+     * @param cambioCte the cambioCte to set
+     */
+    public void setCambioCte(boolean cambioCte) {
+        this.cambioCte = cambioCte;
+    }
+
+    /**
+     * @return the id_cliente
+     */
+    public int getId_cliente() {
+        return id_cliente;
+    }
+
+    /**
+     * @param id_cliente the id_cliente to set
+     */
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
     }
     
 }
